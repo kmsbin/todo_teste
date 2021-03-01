@@ -1,38 +1,189 @@
-.App {
+@import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@500;700&display=swap');
+
+*, html {
+  padding: 0%;
+  margin: none;
+  padding: 0%;
+}
+body {
+  background-color: #90a8bb;
+  color: white;
+  font-family: Arial;
   text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+#root{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+.main {
+  display:flex;
+  justify-content: center;
+  color: #05031d;
+  font-size: 3vw;
+  align-items: center;
+  flex-direction:column ;
+  margin: none;
+  padding: 10px;
+  height: 80%;
+  font-family: 'Oxanium';  width: 60%;
+  border-radius: 10px;
+  background-color: #ffffff;
+}
+.card-main{
+  height: 50%;
+  width: 90%;
+  justify-content: space-evenly;
+  display:flex;
+  flex-direction:column ;
+}
+.row-buttons {
+  justify-content: space-evenly;
+  display:flex;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.table {
+  height: 65%;
+  overflow-y: auto;
+  font-size: 1.5vw;
+}
+thead th { 
+  position: sticky; 
+  top: 0; 
+}
+tr:nth-child(1) th{ 
+  background: white; 
+  position: sticky; 
+  top: 0; 
+  z-index: 10; 
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.card-table{
+  height: 85%;
+  width: 90%;
+}
+.toast {
+  font-size: 1vw;
+} 
+.badge{
+  cursor: pointer;
+}
+.table {
+  width: 100%;
+  /* background: #aaaaaa; */
+}
+ td {
+  height: 5px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.title {
+  font-size: 0.8em;
+}
+.asd {
+  display: inline;
+  float: left;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between ;
+}
+.item {
+  float: left;
+}
+
+.input-group {
   display: flex;
   flex-direction: column;
+  /* align-items: flex-start; */
+  text-align: left;
+
+}
+.check{
+  height: 100%;
+}
+
+.item-grupo {
+  height: 100%;
+}
+.desc {
+  font-size: 0.6em;
+  margin-left: 10px;
+}
+.item-grupo {
+  margin-bottom: 10px;
+  margin-top: 10px;
+  height: 100% !important;
+}
+
+.container {
+  text-align: start;
+  height: 30px !important;
+}
+.itemParente{
+  height: 30px !important;
+
+
+
+}
+
+.btUpdate{
+  background: #ffcc00;
+  padding: 3px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.btnDelete{
+  background: #da3a05;
+  padding: 3px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.row{
+  display: inline;
+  flex-direction: row;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: center !important;
+}
+
+@media (max-width: 600px) {
+  .main{
+    height: 95%;
+    width: 90%;
+    font-size: 3vh;
+    justify-content: space-evenly;
+    display:flex;
+    flex-direction:column ;
+  }
+  .table {
+    font-size: 1.5vh;
+  }
+}
+
+.mt-3 {
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.custom-modal-style {
+  width: 30vw;
+  background-color: #d3dfe9;
+  height: 40vh;
+  position:absolute;
+  right: -100%;
+  top: 50%;
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  flex-direction: column;
 }
+.mt-1 {
+  margin-top: 5px;
 
-.App-link {
-  color: #61dafb;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
+  
+  
