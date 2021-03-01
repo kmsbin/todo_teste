@@ -44,17 +44,21 @@ function App() {
         <ModalFooter>
 
             <Button onClick={()=>{
-              const newRow = {
-                id: data[indexUpdated].id,
-                title: updateTitle,
-                description: updateDesc,
-                priority: data[indexUpdated].priority
-                
+              if(updateTitle !== '' && updateDesc!=='') {
+
+                const newRow = {
+                  id: data[indexUpdated].id,
+                  title: updateTitle,
+                  description: updateDesc,
+                  priority: data[indexUpdated].priority
+                  
+                }
+                let resp = updateTodo(newRow);
+                data[indexUpdated].title = updateTitle;
+                data[indexUpdated].description = updateDesc;               
+                toggle(); 
               }
-              let resp = updateTodo(newRow);
               toggle();
-              data[indexUpdated].title = updateTitle;
-              data[indexUpdated].description = updateDesc;               
 
 
             }} className="mt-1" color="primary">enviar</Button>

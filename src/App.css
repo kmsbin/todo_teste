@@ -170,7 +170,7 @@ tr:nth-child(1) th{
 }
 
 .custom-modal-style {
-  width: 30vw;
+  width: 40vh;
   background-color: #d3dfe9;
   height: 40vh;
   position:absolute;
