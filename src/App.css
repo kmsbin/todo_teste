@@ -295,10 +295,10 @@ tr:nth-child(1) th{
     width: calc(80% + 15px);
   }
   .title {
-    font-size: 3vmax;
+    font-size: 2.5vmax;
   }
   .description {
-    font-size: 3vmax;
+    font-size: 1.9vmax;
   }
 
 
@@ -330,6 +330,7 @@ tr:nth-child(1) th{
 .badge-row {
   display: flex;
   /* align-items: center; */
+  margin-right: 10px;
   align-items: flex-end;
   flex-direction: column;
   font-size: 0.5em;

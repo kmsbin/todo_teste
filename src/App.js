@@ -53,10 +53,12 @@ function App() {
           <div className="todo col-sm">
             <div className="row">
 
-              <div className="title"> <div>{item.title}</div></div>
+              <div className="title text-truncate"> 
+                <span style={{maxWidth: "10px"}} className="text-truncate">{item.title}</span>
+              </div>
             </div>
             <div className="row">
-              <div className="description"> <div>  {item.description}</div></div>
+              <div className="description"> <div className="text-truncate">  {item.description}</div></div>
             </div>
 
           </div>
@@ -104,22 +106,12 @@ function App() {
                 toast((t) => (
                   <span>
                     <span className="dialog-text">
-                      Quer mesmo deletar o item {item.title} ?
+                      Atualizar item: {item.title}
                     </span>
                     <div className='column-dialog'>
                       <div className='row-dialog'>
-                        <input 
-                          // value={updateTitle}
-                          onChange={(evt) => {
-                            titleValue.set(evt.target.value)
-                            }} 
-                            placeholder="title"  />
-                        <input 
-                          placeholder="descrição" 
-                          onChange={(e)=>{
-                            descValue.set(e.target.value)
-                          }} 
-                          className="mt-1" />
+                        <input onChange={(evt) => { titleValue.set(evt.target.value)}} placeholder="novo titulo"  />
+                        <input placeholder="nova descrição" onChange={(e)=>{descValue.set(e.target.value)}} className="mt-1" />
                       </div>
                       <div className='flex-dialog' onClick={() => {}}>
                         <Button className="flex-item" onClick={() => {
@@ -138,7 +130,12 @@ function App() {
                             }
                             let resp = updateTodo(newRow);
                             resp.then(()=>{
-                              fetchDataList();
+                              // fetchDataList();
+                              let newTodoData = data;
+                              newTodoData[indexUpdated].title = title;
+                              newTodoData[indexUpdated].description = desc;
+                              setData(newTodoData);
+                              titleValue.set('');
 
                             })
                             // setUpdateDesc('');
@@ -177,7 +174,7 @@ function App() {
     <>
       
       <Card className='main'>
-        <p>To do</p>
+        <p>Lista de tarefas</p>
         <div className='card-table'>
           <div className='card-main'>
             <Scrollbars autoHide >
@@ -197,14 +194,14 @@ function App() {
                 setInput(evt.target.value); 
                 setInputTitle(evt.target.value) 
               }} 
-              placeholder="title" />
+              placeholder="titulo" />
             <Input 
             value={description} 
             className="in" 
             onChange={(evt) => { 
               setDescription(evt.target.value); 
               setDesc(evt.target.value) }} 
-            placeholder="description" />
+            placeholder="descrição" />
             <Button
               onClick={() => {
                 let resp = createTodo({
