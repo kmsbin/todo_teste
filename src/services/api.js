@@ -78,8 +78,11 @@ const createTodo = (data)=>{
     };
 
   return axios(options).then((data)=>{
+    if(data.data.status =="0"){
+      throw new Error(data.data.msg);
+    }
       return data;
-  }).catch((erro)=>{ console.error(erro) })
+  }).catch((erro)=>{ throw new Error(erro); })
 }
 
 

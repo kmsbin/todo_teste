@@ -1,155 +1,239 @@
-import logo from './logo.svg';
-import {Button,Row, Alert,Modal, ModalBody, ModalFooter, Card, Col, Input, Table } from 'reactstrap'
+import { useEffect, useState, useRef, useCallback } from 'react';
+import { Button, Badge, Row, Alert, Modal, ModalBody, ModalFooter, Card, Col, Input, } from 'reactstrap'
 import './App.css';
-import { Badge } from '@material-ui/core';
 import { getAllTodo, deleteTodo, updateTodo, createTodo } from "./services/api";
 import { Scrollbars } from 'react-custom-scrollbars';
-import { useEffect, useState } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
+import CustomToast from './components/Toast'
+import useTrait from "./components/useTrait";
+
+// import "bootstrap";
 
 function App() {
+
+  const titleValue = useTrait(''); 
+  const descValue = useTrait(''); 
+
   const [data, setData] = useState();
+  const [input, setInput] = useState('');
+  const [description, setDescription] = useState('');
   const [inputTitle, setInputTitle] = useState();
   const [inputDesc, setDesc] = useState("");
-  const [updateTitle, setUpdateTitle] = useState();
-  const [updateDesc, setUpdateDesc] = useState("");
   const [open, setOpen] = useState(false);
   const [focusAfterClose, setFocusAfterClose] = useState(true);
-  const [indexUpdated, setIndexUpdated] = useState(0) 
+  const [indexUpdated, setIndexUpdated] = useState(0)
 
 
   const toggle = () => setOpen(!open);
-  const handleSelectChange = ({target: { value }}) => {
-      setFocusAfterClose(JSON.parse(value));
+  const handleSelectChange = ({ target: { value } }) => {
+    setFocusAfterClose(JSON.parse(value));
   }
 
+  const fetchDataList = async () => {
+    const items = await getAllTodo();
+    setData(items.data)
+    console.log(items.data);
+  }
+  useEffect(() => {
+    fetchDataList();
+  }, [])
+  let desc;
+  let title;
 
   useEffect(()=>{
-    (async ()=>{
-      const items = await getAllTodo();
-      setData(items.data)
-      console.log(items.data);
-    }
-    )()
-  },[])
 
+  })
+  function returnList() {
+    return data?.map((item, index) => {
+      return <div className="rowItem container">
+        <div className="row">
+
+          {/* <div className="col-sm" >aggsa</div> */}
+          <div className="col-sm checkbox-layout"> <Input type="checkbox" ></Input></div>
+          <div className="todo col-sm">
+            <div className="row">
+
+              <div className="title"> <div>{item.title}</div></div>
+            </div>
+            <div className="row">
+              <div className="description"> <div>  {item.description}</div></div>
+            </div>
+
+          </div>
+          <Col className="badge-row col-md-auto justify-content-between">
+            <div className="row-1 justify-content-between">
+
+              <Button className="delete" key={item.id} onClick={() => {
+                let isDelete = true;
+
+                toast((t) => (
+                  <span>
+                    <span className="dialog-text">
+                      Quer mesmo deletar o item {item.title} ?
+                    </span>
+                    <div className='flex-dialog'>
+                      <button className="flex-item" onClick={() => {
+                        isDelete = true
+                        toast.dismiss(t.id)
+                        let resp = deleteTodo({
+                          id: item.id,
+                          title: item.title,
+                          description: item.description,
+                          priority: item.priority
+                        });
+                        setData(data.filter((items) => { return item !== items }));
+
+                      }}>
+                        Sim
+                        </button>
+
+                      <button onClick={() => toast.dismiss()}>Não</button>
+
+                    </div>
+                  </span>
+                ));
+                if (isDelete) {
+
+                }
+              }} color="primary" size="sm" pill="true"></Button>
+
+            </div>
+            <div className="row-1 justify-content-between">
+
+              <Button className="update badge badge-default badge-pill" onClick={() => {
+                toast((t) => (
+                  <span>
+                    <span className="dialog-text">
+                      Quer mesmo deletar o item {item.title} ?
+                    </span>
+                    <div className='column-dialog'>
+                      <div className='row-dialog'>
+                        <input 
+                          // value={updateTitle}
+                          onChange={(evt) => {
+                            titleValue.set(evt.target.value)
+                            }} 
+                            placeholder="title"  />
+                        <input 
+                          placeholder="descrição" 
+                          onChange={(e)=>{
+                            descValue.set(e.target.value)
+                          }} 
+                          className="mt-1" />
+                      </div>
+                      <div className='flex-dialog' onClick={() => {}}>
+                        <Button className="flex-item" onClick={() => {
+                          console.log(titleValue.get())
+                          const title = titleValue.get();
+                          const desc = descValue.get();
+                          toast.dismiss()
+                          if (title !== '' && desc !== '') {
+                            
+                            const newRow = {
+                              id: data[indexUpdated].id,
+                              title: title,
+                              description: desc,
+                              priority: data[indexUpdated].priority
+                              
+                            }
+                            let resp = updateTodo(newRow);
+                            resp.then(()=>{
+                              fetchDataList();
+
+                            })
+                            // setUpdateDesc('');
+                            // setUpdateTitle('');
+                          }
+                         
+                        
+                        }}>
+                        Sim
+                          </Button>
+                        <button onClick={() =>{ 
+                          toast.dismiss()
+                          }}>Não</button>
+                        </div>
+
+                    </div>
+                  </span>
+                ));
+                
+                // toggle();
+                setIndexUpdated(index)
+
+              }} >
+
+              </Button>
+            </div>
+
+          </Col>
+        </div>
+      </div>
+
+    })
+  }
 
   return (
     <>
-        <Modal className="custom-modal-style" isOpen={open}>
-        <ModalBody>
-          <h4>atualizar todo</h4>
-          <Input onChange={(e)=>{ setUpdateTitle(e.target.value) }} placeholder="title" className="mt-1"/>
-          <Input onChange={(e)=>{ setUpdateDesc(e.target.value) }} placeholder="descrição"  className="mt-1"/>
-        </ModalBody>
-        <ModalFooter>
-
-            <Button onClick={()=>{
-              if(updateTitle !== '' && updateDesc!=='') {
-
-                const newRow = {
-                  id: data[indexUpdated].id,
-                  title: updateTitle,
-                  description: updateDesc,
-                  priority: data[indexUpdated].priority
-                  
-                }
-                let resp = updateTodo(newRow);
-                data[indexUpdated].title = updateTitle;
-                data[indexUpdated].description = updateDesc;               
-                toggle(); 
-              }
-              toggle();
-
-
-            }} className="mt-1" color="primary">enviar</Button>
-        </ModalFooter>
-    </Modal>
-    <Card className='main'>
-            <div className='card-table'>
-            <p>associados</p>
-            <div className="table">
+      
+      <Card className='main'>
+        <p>To do</p>
+        <div className='card-table'>
+          <div className='card-main'>
             <Scrollbars autoHide >
-                <Table striped>
-                {/* <thead>
-                    <tr>
-                        <th>Socio</th>
-                        <th>Clube</th>
-                        <th>Delete</th>
-                    </tr>
-                </thead> */}
-                <tbody>
-                { data?.map((item, index) => {
-                    return <tr className="itemParent">
-                      <td><Input type="checkbox" /></td>
-                      <td className="container">
-                        <tr className="title"> <h2> {item.title}</h2></tr>
-                        <tr className="description"> <h6>{item.description}</h6></tr>  
-
-                      </td>
-                      <td>
-                        <Col>
-                        <Badge onClick={()=> {
-                          let resp = deleteTodo({
-                            id:item.id,
-                            title: item.title,
-                            description: item.description,
-                            priority: item.priority
-                          });
-                          setData(data.filter((items)=>{return item !== items }));
-
-                        }} className="btnDelete"color="primary">delete</Badge>
-                        </Col>
-
-                      </td>
-                      <td >
-                      <Badge onClick={()=>{
-                        toggle();
-                        setIndexUpdated(index)
-  
-                      }} className="btUpdate" color="warning">
-                        update
-                      </Badge>
-
-                      </td>
-                    </tr>
-               
-               })}
+              {returnList()}
+              <Alert>
 
 
+              </Alert>
+            </Scrollbars>
+          </div>
+          <div className="container-buttons">
 
-                {/* <tr>
-                    <td>gfs</td>
-                    <td>gfs</td>
-                    <td>gfs</td>
-                  </tr> */}
-                </tbody>
-                </Table>
-                </Scrollbars>
-            </div>
-            <Row> 
-              <Input onChange={(evt)=>{ setInputTitle(evt.target.value) }} placeholder="title" mt-1 ml-1 className="mt-3 ml-1" />
-              <Input onChange={(evt)=>{ setDesc(evt.target.value) }} placeholder="description" className="mt-3" /> 
-              <Button 
-              onClick={()=>{ 
-                let resp= createTodo({
+            <Input 
+              value={input} 
+              className="in" 
+              onChange={(evt) => { 
+                setInput(evt.target.value); 
+                setInputTitle(evt.target.value) 
+              }} 
+              placeholder="title" />
+            <Input 
+            value={description} 
+            className="in" 
+            onChange={(evt) => { 
+              setDescription(evt.target.value); 
+              setDesc(evt.target.value) }} 
+            placeholder="description" />
+            <Button
+              onClick={() => {
+                let resp = createTodo({
                   title: inputTitle,
                   description: inputDesc,
                   priority: 90
                 })
+                setInput('');
+                setDescription('');
+                toast.promise(resp, {
+                  loading: 'Cadastrando...',
+                  success: <b>Tarefa cadastrada</b>,
+                  error: <b>Tarefa não cadastrada.</b>,
+                })
+                resp.then(() => {
+                  fetchDataList();
+
+                })
+
                 console.log(resp)
-               }}
-              className="mt-3" color="primary">Add</Button>
-            </Row>
-            <Alert>
-
-
-            </Alert>
-            
-
-            </div>
-        </Card>
-        </>
+              }}
+              color="primary">adicionar</Button>
+          </div>
+        </div>
+        {CustomToast()}
+      </Card>
+    </>
   );
 }
+
 
 export default App;
